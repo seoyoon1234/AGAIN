@@ -1,0 +1,462 @@
+<div id="again-map-first" lang="en">
+  <section class="am-phone" aria-label="AGAIN mobile map mockup">
+    <div class="am-map" aria-label="Interactive Seoul map">
+      <div id="am-leaflet-map"></div>
+      <div id="am-route-line" class="am-route-line" hidden><i></i><i></i><i></i></div>
+    </div>
+
+    <header class="am-topbar">
+      <div class="am-search-shell">
+        <span class="am-logo" aria-label="AGAIN"><img src="/brand/again-pin.png" alt="AGAIN" width="40" height="40"></span>
+        <button type="button" class="am-search cursor-interaction" data-action="search"><i data-lucide="search" aria-hidden="true"></i><span id="am-search-text">Where do you want to go?</span></button>
+        <button type="button" class="am-icon-button cursor-interaction" data-action="voice" aria-label="Search by voice"><i data-lucide="mic" aria-hidden="true"></i></button>
+        <button type="button" class="am-icon-button cursor-interaction" data-action="settings" aria-label="Language and settings"><i data-lucide="settings-2" aria-hidden="true"></i></button>
+        <button type="button" class="am-icon-button cursor-interaction" data-action="saved" aria-label="Saved scenes"><i data-lucide="bookmark" aria-hidden="true"></i><span id="am-saved-count"></span></button>
+      </div>
+      <div class="am-chips" aria-label="Route experience filters">
+        <button type="button" class="cursor-interaction is-active" data-action="filter" data-filter="scenic"><i data-lucide="image" aria-hidden="true"></i>Scenic</button>
+        <button type="button" class="cursor-interaction" data-action="filter" data-filter="local"><i data-lucide="store" aria-hidden="true"></i>Local</button>
+        <button type="button" class="cursor-interaction" data-action="filter" data-filter="surprise"><i data-lucide="sparkles" aria-hidden="true"></i>Surprise me</button>
+      </div>
+    </header>
+
+    <div class="am-map-tools">
+      <button type="button" class="am-fab cursor-interaction" data-action="location" aria-label="Center on my location"><i data-lucide="locate-fixed" aria-hidden="true"></i></button>
+      <button type="button" class="am-fab cursor-interaction" data-action="layers" aria-label="Map layers"><i data-lucide="layers-2" aria-hidden="true"></i></button>
+    </div>
+
+    <div id="am-panel" class="am-panel" aria-live="polite"></div>
+
+    <nav class="am-nav" aria-label="Primary navigation">
+      <button type="button" class="cursor-interaction is-active" data-action="explore"><i data-lucide="map" aria-hidden="true"></i><span>Explore</span></button>
+      <button type="button" class="cursor-interaction" data-action="route"><i data-lucide="route" aria-hidden="true"></i><span>Route</span></button>
+      <button type="button" class="cursor-interaction" data-action="saved"><i data-lucide="bookmark" aria-hidden="true"></i><span>Saved</span></button>
+    </nav>
+  </section>
+  <div id="am-status" class="am-status" role="status" aria-live="polite"></div>
+</div>
+
+<style>
+  #again-map-first { --am-citrus:#FFA62B; --am-breeze:#86C5FF; --am-amalfi:#2E5AA7; --am-cream:#F8E6A0; --am-bg:light-dark(#fbf8ee,#17233a); --am-surface:light-dark(#ffffff,#1f3150); --am-ink:light-dark(#18335f,#fffaf0); --am-muted:light-dark(#64728a,#c3d4ed); --am-line:light-dark(#dce5f0,#3d5680); --am-map:light-dark(#e9f0f4,#223653); --am-road:light-dark(#ffffff,#425b7d); --am-block:light-dark(#dbe8ef,#2c4465); --am-park:light-dark(#f8e6a0,#5d5f45); --am-water:light-dark(#cce9ff,#2a5276); --am-brand:#2E5AA7; --am-brand-ink:#ffffff; --am-route:#2E5AA7; --am-location:#86C5FF; --am-scene:#FFA62B; --am-highlight:#F8E6A0; --am-shadow:light-dark(0 8px 30px rgba(46,90,167,.16),0 10px 34px rgba(0,0,0,.38)); width:100%; color:var(--am-ink); font-family:Inter,"Segoe UI",Arial,sans-serif; font-size:14px; line-height:1.4; color-scheme:light dark; }
+  #again-map-first * { box-sizing:border-box; }
+  #again-map-first button,#again-map-first input { font:inherit; }
+  #again-map-first button { color:inherit; }
+  #again-map-first button:focus-visible,#again-map-first input:focus-visible { outline:3px solid color-mix(in srgb,var(--am-route) 45%,transparent); outline-offset:2px; }
+  #again-map-first h1,#again-map-first h2,#again-map-first h3,#again-map-first p { margin:0; }
+  #again-map-first svg { width:18px; height:18px; stroke-width:2; }
+  #again-map-first .am-phone { position:relative; width:min(100%,420px); height:760px; margin:0 auto; overflow:hidden; border-radius:28px; background:var(--am-map); border:1px solid var(--am-line); box-shadow:var(--am-shadow); }
+  #again-map-first .am-map { position:absolute; inset:0; overflow:hidden; background:var(--am-map); }
+  #again-map-first #am-leaflet-map { position:absolute;inset:0;z-index:1;background:var(--am-map); }
+  #again-map-first .leaflet-container { font-family:inherit; }
+  #again-map-first .leaflet-control-attribution { font-size:9px;background:color-mix(in srgb,var(--am-surface) 84%,transparent);color:var(--am-muted); }
+  #again-map-first .leaflet-control-attribution a { color:var(--am-amalfi); }
+  #again-map-first .am-leaflet-pin { background:transparent;border:0; }
+  #again-map-first .am-leaflet-pin span { width:40px;height:40px;border:4px solid #fff;border-radius:50%;display:grid;place-items:center;background:var(--am-citrus);color:#fff;font-weight:700;box-shadow:0 4px 13px rgba(23,51,95,.28);position:relative; }
+  #again-map-first .am-leaflet-pin span::after { content:"";position:absolute;left:50%;bottom:-7px;width:10px;height:10px;background:var(--am-citrus);transform:translateX(-50%) rotate(45deg);z-index:-1; }
+  #again-map-first .am-leaflet-pin.is-selected span { background:var(--am-amalfi);transform:scale(1.08); }
+  #again-map-first .leaflet-popup-content-wrapper { border-radius:14px;background:var(--am-surface);color:var(--am-ink);box-shadow:var(--am-shadow); }
+  #again-map-first .leaflet-popup-tip { background:var(--am-surface); }
+  #again-map-first .leaflet-popup-content { margin:10px 12px;font-size:12px; }
+  #again-map-first .leaflet-popup-content strong { display:block;font-size:13px; }
+  #again-map-first .am-block { position:absolute; background:var(--am-block); border-radius:7px; transform:rotate(-12deg); }
+  #again-map-first .am-b1{width:150px;height:96px;left:-22px;top:116px}.am-b2{width:120px;height:110px;right:-18px;top:126px}.am-b3{width:132px;height:88px;left:26px;top:280px}.am-b4{width:160px;height:92px;right:-30px;top:318px}.am-b5{width:145px;height:110px;left:-20px;top:455px}.am-b6{width:122px;height:92px;right:18px;top:505px}
+  #again-map-first .am-road { position:absolute; height:14px; background:var(--am-road); box-shadow:0 0 0 1px color-mix(in srgb,var(--am-line) 70%,transparent); border-radius:20px; transform-origin:left center; }
+  #again-map-first .am-r1{width:520px;left:-60px;top:254px;transform:rotate(-12deg)}.am-r2{width:500px;left:26px;top:92px;transform:rotate(67deg)}.am-r3{width:400px;left:-25px;top:410px;transform:rotate(23deg)}.am-r4{width:285px;left:128px;top:205px;transform:rotate(42deg)}.am-r5{width:280px;left:-18px;top:585px;transform:rotate(-38deg)}
+  #again-map-first .am-park { position:absolute; width:188px;height:150px;right:-40px;top:235px;border-radius:46% 54% 56% 44%;background:var(--am-park);transform:rotate(-14deg);display:flex;align-items:center;justify-content:center;color:var(--am-amalfi);font-size:11px;font-weight:500; }
+  #again-map-first .am-park span { transform:rotate(14deg); }
+  #again-map-first .am-label { position:absolute;color:var(--am-muted);font-size:11px;font-weight:500;text-shadow:0 1px var(--am-map); }
+  #again-map-first .am-l1{left:42px;top:230px}.am-l2{right:52px;top:326px}.am-l3{left:62px;top:480px}
+  #again-map-first .am-route-line { position:absolute; inset:0; pointer-events:none;z-index:2; }
+  #again-map-first .am-route-line i { position:absolute; height:6px; background:var(--am-route); border:2px solid var(--am-surface); border-radius:10px; transform-origin:left center; }
+  #again-map-first .am-route-line i:nth-child(1){width:125px;left:68px;top:530px;transform:rotate(-55deg)}.am-route-line i:nth-child(2){width:103px;left:139px;top:429px;transform:rotate(-18deg)}.am-route-line i:nth-child(3){width:90px;left:234px;top:398px;transform:rotate(-62deg)}
+  #again-map-first .am-pin { position:absolute;border:0;background:none;padding:0;display:flex;align-items:center;gap:5px;z-index:3; }
+  #again-map-first .am-pin span { position:relative;width:40px;height:40px;border:4px solid var(--am-surface);border-radius:50%;display:grid;place-items:center;background:var(--am-scene);color:#fff;font-weight:700;box-shadow:0 4px 12px rgba(0,0,0,.18); }
+  #again-map-first .am-pin span::after { content:"";position:absolute;left:50%;bottom:-7px;width:10px;height:10px;background:var(--am-scene);transform:translateX(-50%) rotate(45deg);z-index:-1; }
+  #again-map-first .am-pin b { background:var(--am-surface);border-radius:16px;padding:5px 8px;box-shadow:0 3px 10px rgba(0,0,0,.14);font-size:11px;font-weight:500;white-space:nowrap; }
+  #again-map-first .am-pin-a{left:112px;top:378px}.am-pin-b{right:48px;top:475px}.am-pin-c{left:38px;top:294px}
+  #again-map-first .am-destination { position:absolute;right:73px;top:277px;width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:var(--am-surface);color:var(--am-route);box-shadow:0 4px 14px rgba(0,0,0,.2);z-index:4; }
+  #again-map-first .am-current { position:absolute;left:55px;top:540px;width:18px;height:18px;background:var(--am-location);border:4px solid var(--am-surface);border-radius:50%;box-shadow:0 0 0 8px color-mix(in srgb,var(--am-location) 30%,transparent);z-index:4; }
+  #again-map-first .am-topbar { position:absolute;inset:18px 14px auto;z-index:10;display:flex;flex-direction:column;gap:10px; }
+  #again-map-first .am-search-shell { height:56px;background:var(--am-surface);border-radius:18px;display:flex;align-items:center;gap:10px;padding:7px 8px 7px 10px;box-shadow:var(--am-shadow); }
+  #again-map-first .am-logo { width:42px;height:42px;display:grid;place-items:center;flex:0 0 auto; }
+  #again-map-first .am-logo img { width:42px;height:42px;object-fit:contain;filter:drop-shadow(0 1px 1px rgba(24,51,95,.09)); }
+  #again-map-first .am-search { min-width:0;flex:1;border:0;background:transparent;display:flex;align-items:center;gap:9px;text-align:left;padding:8px 2px;color:var(--am-muted); }
+  #again-map-first .am-search span { overflow:hidden;text-overflow:ellipsis;white-space:nowrap; }
+  #again-map-first .am-icon-button { position:relative;width:40px;height:40px;border:0;border-radius:50%;display:grid;place-items:center;background:transparent; }
+  #again-map-first .am-icon-button:hover { background:color-mix(in srgb,var(--am-line) 40%,transparent); }
+  #again-map-first #am-saved-count { position:absolute;right:1px;top:1px;min-width:16px;height:16px;border-radius:8px;background:var(--am-scene);color:#fff;font-size:10px;display:grid;place-items:center; }
+  #again-map-first #am-saved-count:empty { display:none; }
+  #again-map-first .am-chips { display:flex;gap:7px;overflow:hidden; }
+  #again-map-first .am-chips button { min-height:38px;border:0;border-radius:20px;background:var(--am-surface);display:flex;align-items:center;gap:6px;padding:7px 12px;box-shadow:0 2px 8px rgba(0,0,0,.12);white-space:nowrap;font-size:12px; }
+  #again-map-first .am-chips button.is-active { background:var(--am-highlight);color:var(--am-amalfi);font-weight:600; }
+  #again-map-first .am-chips svg { width:15px;height:15px; }
+  #again-map-first .am-map-tools { position:absolute;right:14px;bottom:276px;z-index:8;display:flex;flex-direction:column;gap:8px; }
+  #again-map-first .am-fab { width:44px;height:44px;border:0;border-radius:14px;display:grid;place-items:center;background:var(--am-surface);box-shadow:0 3px 12px rgba(0,0,0,.15); }
+  #again-map-first .am-panel { position:absolute;left:0;right:0;bottom:64px;z-index:9;background:var(--am-surface);border-radius:24px 24px 0 0;box-shadow:0 -7px 26px rgba(0,0,0,.14);padding:10px 16px 16px;max-height:calc(100% - 165px);height:var(--sheet-height,315px);overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y;scrollbar-width:thin;scrollbar-color:var(--am-line) transparent;transition:height .16s ease; }
+  #again-map-first .am-panel::-webkit-scrollbar { width:5px; }
+  #again-map-first .am-panel::-webkit-scrollbar-thumb { background:var(--am-line);border-radius:5px; }
+  #again-map-first .am-handle { width:76px;height:25px;margin:-8px auto 6px;display:flex;align-items:center;justify-content:center;touch-action:none;cursor:ns-resize;border:0;background:transparent;padding:0; }
+  #again-map-first .am-handle::after {content:"";width:40px;height:5px;border-radius:5px;background:var(--am-muted);opacity:.65;}
+  #again-map-first .am-panel.is-dragging {transition:none;user-select:none;}
+  #again-map-first .am-panel.is-collapsed {overflow:hidden;}
+  #again-map-first .am-settings select {width:100%;min-height:48px;padding:10px;border:1px solid var(--am-line);border-radius:12px;background:var(--am-surface);color:var(--am-ink);font:inherit;}
+  #again-map-first .am-settings label {display:block;font-weight:600;margin:12px 0 7px;}
+  #again-map-first .am-settings .am-hint {margin:10px 0;font-size:12px;line-height:1.5;}
+  #again-map-first .am-map-tools {transition:bottom .16s ease;}
+  #again-map-first .am-fab.is-locating {background:var(--am-highlight);color:var(--am-amalfi);}
+
+  #again-map-first .am-panel-head { display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:13px; }
+  #again-map-first .am-panel h2 { font-size:19px;line-height:1.2;font-weight:650;letter-spacing:-.3px; }
+  #again-map-first .am-panel p { color:var(--am-muted);font-size:12px;margin-top:4px; }
+  #again-map-first .am-pill { border:0;border-radius:18px;background:var(--am-highlight);color:var(--am-amalfi);padding:7px 10px;white-space:nowrap;font-size:11px;font-weight:600; }
+  #again-map-first .am-cards { display:grid;grid-template-columns:repeat(3,1fr);gap:10px; }
+  #again-map-first .am-card { border:0;background:transparent;text-align:left;padding:0;min-width:0; }
+  #again-map-first .am-thumb { display:block;width:100%;height:96px;border-radius:14px;position:relative;overflow:hidden;background:linear-gradient(160deg,var(--am-breeze) 0 48%,#64789c 49% 65%,var(--am-amalfi) 66%); }
+  #again-map-first .am-thumb::before { content:"";position:absolute;width:22px;height:64px;left:50%;bottom:14px;background:#4f574e;box-shadow:0 0 0 4px rgba(255,255,255,.38); }
+  #again-map-first .am-thumb::after { content:"";position:absolute;left:0;right:0;bottom:0;height:29px;background:linear-gradient(25deg,#3f433a 0 35%,#646250 36% 60%,#373b35 61%); }
+  #again-map-first .am-thumb.am-t2 { background:linear-gradient(145deg,var(--am-cream) 0 41%,var(--am-citrus) 42% 61%,#805f42 62%); }
+  #again-map-first .am-thumb.am-t3 { background:linear-gradient(165deg,var(--am-citrus) 0 43%,var(--am-breeze) 44% 56%,var(--am-amalfi) 57%); }
+  #again-map-first .am-detail-hero.am-t2 { background:linear-gradient(145deg,var(--am-cream) 0 41%,var(--am-citrus) 42% 61%,#805f42 62%); }
+  #again-map-first .am-detail-hero.am-t3 { background:linear-gradient(165deg,var(--am-citrus) 0 43%,var(--am-breeze) 44% 56%,var(--am-amalfi) 57%); }
+  #again-map-first .am-thumb .am-badge { position:absolute;top:7px;left:7px;z-index:2;border-radius:10px;padding:4px 6px;background:rgba(20,25,23,.78);color:#fff;font-size:10px;font-weight:600; }
+  #again-map-first .am-thumb .am-audio-dot { position:absolute;right:7px;top:7px;z-index:2;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:var(--am-citrus);color:#fff;box-shadow:0 2px 7px rgba(0,0,0,.18); }
+  #again-map-first .am-thumb .am-audio-dot svg { width:14px;height:14px; }
+  #again-map-first .am-card strong { display:block;font-size:12px;line-height:1.25;margin-top:7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
+  #again-map-first .am-card small { display:block;color:var(--am-muted);font-size:11px;margin-top:2px; }
+  #again-map-first .am-nav { position:absolute;left:0;right:0;bottom:0;height:65px;z-index:11;background:var(--am-surface);border-top:1px solid var(--am-line);display:grid;grid-template-columns:repeat(3,1fr);padding:7px 14px 8px; }
+  #again-map-first .am-nav button { border:0;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;color:var(--am-muted);font-size:10px; }
+  #again-map-first .am-nav button.is-active { color:var(--am-brand);font-weight:600; }
+  #again-map-first .am-nav svg { width:20px;height:20px; }
+  #again-map-first .am-detail-hero { height:134px;border-radius:17px;position:relative;overflow:hidden;background:linear-gradient(160deg,var(--am-breeze) 0 48%,#677a9b 49% 65%,var(--am-amalfi) 66%);margin-bottom:14px; }
+  #again-map-first .am-detail-hero::before { content:"";position:absolute;width:29px;height:87px;left:48%;bottom:17px;background:#4f574e;box-shadow:0 0 0 5px rgba(255,255,255,.32); }
+  #again-map-first .am-detail-hero::after { content:"";position:absolute;left:0;right:0;bottom:0;height:35px;background:#40453e;clip-path:polygon(0 70%,30% 25%,48% 72%,67% 18%,100% 66%,100% 100%,0 100%); }
+  #again-map-first .am-close { position:absolute;right:12px;top:12px;z-index:2;width:38px;height:38px;border:0;border-radius:50%;background:rgba(20,25,23,.72);color:#fff;display:grid;place-items:center; }
+  #again-map-first .am-detail-title { display:flex;justify-content:space-between;gap:12px;align-items:start; }
+  #again-map-first .am-detail-title h2 { font-size:20px; }
+  #again-map-first .am-save { width:42px;height:42px;border:1px solid var(--am-line);border-radius:13px;background:var(--am-surface);display:grid;place-items:center;flex:0 0 auto; }
+  #again-map-first .am-save.is-saved { color:var(--am-amalfi);background:var(--am-highlight); }
+  #again-map-first .am-meta { display:flex;gap:8px;flex-wrap:wrap;margin:12px 0; }
+  #again-map-first .am-meta span { border-radius:15px;background:var(--am-bg);padding:6px 8px;font-size:11px;color:var(--am-muted); }
+  #again-map-first .am-audio { display:grid;grid-template-columns:46px 1fr auto;gap:10px;align-items:center;border-radius:16px;background:color-mix(in srgb,var(--am-breeze) 22%,var(--am-surface));padding:11px;margin:12px 0; }
+  #again-map-first .am-play { width:46px;height:46px;border:0;border-radius:50%;display:grid;place-items:center;background:var(--am-amalfi);color:#fff; }
+  #again-map-first .am-audio-copy { min-width:0; }
+  #again-map-first .am-audio-copy strong { display:block;font-size:13px; }
+  #again-map-first .am-audio-copy small { color:var(--am-muted);font-size:11px; }
+  #again-map-first .am-progress { height:4px;border-radius:4px;background:color-mix(in srgb,var(--am-amalfi) 14%,var(--am-surface));margin-top:7px;overflow:hidden; }
+  #again-map-first .am-progress span { display:block;height:100%;border-radius:4px;background:var(--am-citrus);transition:width .25s linear; }
+  #again-map-first .am-cc { min-width:40px;height:36px;border:1px solid var(--am-line);border-radius:10px;background:var(--am-surface);font-size:11px;font-weight:700; }
+  #again-map-first .am-cc[aria-pressed="true"] { background:var(--am-highlight);color:var(--am-amalfi);border-color:var(--am-highlight); }
+  #again-map-first .am-caption { border-left:3px solid var(--am-citrus);padding:7px 10px;margin:-2px 0 12px;color:var(--am-muted);font-size:12px; }
+  #again-map-first .am-soundscape { display:flex;align-items:center;gap:10px;border-top:1px solid var(--am-line);border-bottom:1px solid var(--am-line);padding:10px 0;margin-bottom:12px; }
+  #again-map-first .am-soundscape>i { color:var(--am-citrus); }
+  #again-map-first .am-soundscape div { flex:1;min-width:0; }
+  #again-map-first .am-soundscape strong { display:block;font-size:12px; }
+  #again-map-first .am-soundscape small { color:var(--am-muted);font-size:11px; }
+  #again-map-first .am-sound-button { min-width:44px;height:36px;border:1px solid var(--am-line);border-radius:11px;background:var(--am-surface);display:grid;place-items:center; }
+  #again-map-first .am-sound-button[aria-pressed="true"] { background:var(--am-highlight);color:var(--am-amalfi);border-color:var(--am-highlight); }
+  #again-map-first .am-cost { border-radius:16px;background:var(--am-bg);padding:12px;margin:12px 0; }
+  #again-map-first .am-cost-head { display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:7px; }
+  #again-map-first .am-cost-head strong { font-size:13px; }
+  #again-map-first .am-cost-head b { color:var(--am-amalfi);font-size:18px; }
+  #again-map-first .am-cost p { color:var(--am-muted);font-size:11px; }
+  #again-map-first .am-info-grid { display:grid;grid-template-columns:1fr;gap:8px;margin:11px 0; }
+  #again-map-first .am-info-row { display:flex;gap:9px;align-items:flex-start;font-size:12px; }
+  #again-map-first .am-info-row>i { color:var(--am-amalfi);margin-top:1px; }
+  #again-map-first .am-info-row div { flex:1; }
+  #again-map-first .am-info-row strong { display:block;font-size:12px; }
+  #again-map-first .am-info-row small { display:block;color:var(--am-muted);font-size:11px; }
+  #again-map-first .am-source { display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--am-muted);font-size:11px;margin:10px 0; }
+  #again-map-first .am-source a { color:var(--am-amalfi);font-weight:600;text-decoration:none; }
+  #again-map-first .am-voice-listening { background:var(--am-amalfi);color:#fff; }
+  #again-map-first .am-actions { display:grid;grid-template-columns:1fr 1.35fr;gap:9px;margin-top:14px; }
+  #again-map-first .am-button { min-height:46px;border-radius:13px;border:1px solid var(--am-line);background:var(--am-surface);font-weight:600;display:flex;align-items:center;justify-content:center;gap:7px;padding:10px; }
+  #again-map-first .am-button.am-primary { background:var(--am-brand);color:var(--am-brand-ink);border-color:var(--am-brand); }
+  #again-map-first .am-search-panel { display:flex;flex-direction:column;gap:9px; }
+  #again-map-first .am-field { display:flex;align-items:center;gap:9px;border:1px solid var(--am-line);border-radius:13px;min-height:48px;padding:6px 10px; }
+  #again-map-first .am-field input { min-width:0;flex:1;border:0;background:transparent;color:var(--am-ink);font-size:16px;outline:0; }
+  #again-map-first .am-field span { width:10px;height:10px;border-radius:50%;background:var(--am-route);flex:0 0 auto; }
+  #again-map-first .am-field.am-dest span { background:var(--am-scene);border-radius:3px; }
+  #again-map-first .am-route-compare { display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:12px 0; }
+  #again-map-first .am-route-option { border:1px solid var(--am-line);border-radius:15px;background:var(--am-surface);padding:12px;text-align:left; }
+  #again-map-first .am-route-option.is-active { border:2px solid var(--am-amalfi);padding:11px;background:color-mix(in srgb,var(--am-highlight) 55%,var(--am-surface)); }
+  #again-map-first .am-route-option small { display:block;color:var(--am-muted);font-size:11px; }
+  #again-map-first .am-route-option strong { display:block;font-size:21px;margin:4px 0 2px; }
+  #again-map-first .am-route-summary { display:flex;align-items:center;gap:10px;border-top:1px solid var(--am-line);border-bottom:1px solid var(--am-line);padding:11px 0; }
+  #again-map-first .am-route-summary i { color:var(--am-brand); }
+  #again-map-first .am-route-summary div { flex:1; }
+  #again-map-first .am-route-summary strong { display:block;font-size:13px; }
+  #again-map-first .am-route-summary small { color:var(--am-muted);font-size:11px; }
+  #again-map-first .am-guide { display:flex;align-items:center;gap:10px;border-radius:14px;background:color-mix(in srgb,var(--am-breeze) 16%,var(--am-surface));padding:10px 11px;margin-top:10px; }
+  #again-map-first .am-guide>i { color:var(--am-amalfi); }
+  #again-map-first .am-guide div { flex:1; }
+  #again-map-first .am-guide strong { display:block;font-size:12px; }
+  #again-map-first .am-guide small { color:var(--am-muted);font-size:11px; }
+  #again-map-first .am-switch { width:46px;height:28px;border:0;border-radius:15px;background:var(--am-line);padding:3px; }
+  #again-map-first .am-switch span { display:block;width:22px;height:22px;border-radius:50%;background:var(--am-surface);transition:transform .18s ease;box-shadow:0 1px 4px rgba(0,0,0,.2); }
+  #again-map-first .am-switch[aria-pressed="true"] { background:var(--am-amalfi); }
+  #again-map-first .am-switch[aria-pressed="true"] span { transform:translateX(18px); }
+  #again-map-first .am-empty { text-align:center;padding:22px 10px 18px; }
+  #again-map-first .am-empty .am-empty-icon { width:54px;height:54px;border-radius:18px;background:var(--am-bg);display:grid;place-items:center;margin:0 auto 12px;color:var(--am-muted); }
+  #again-map-first .am-list { display:flex;flex-direction:column;gap:9px; }
+  #again-map-first .am-saved-row { display:grid;grid-template-columns:74px 1fr auto;gap:10px;align-items:center;border-bottom:1px solid var(--am-line);padding-bottom:9px; }
+  #again-map-first .am-saved-row .am-thumb { height:62px; }
+  #again-map-first .am-saved-row strong { font-size:13px; }
+  #again-map-first .am-saved-row small { color:var(--am-muted);font-size:11px; }
+  #again-map-first .am-saved-row button { width:38px;height:38px;border:0;border-radius:12px;background:var(--am-bg);display:grid;place-items:center; }
+  #again-map-first .am-status { min-height:22px;text-align:center;color:var(--am-muted);font-size:12px;margin-top:8px; }
+  @media(max-width:360px){#again-map-first .am-phone{height:700px;border-radius:22px}#again-map-first .am-cards{gap:7px}#again-map-first .am-chips button{padding:7px 10px}}
+  @media(pointer:coarse){#again-map-first button{min-height:44px}}
+
+  /* The supplied AGAIN character stays inside the map-first navigation, rather than replacing the map. */
+  #again-map-first .am-eyebrow {font-size:9px;letter-spacing:1.3px;font-weight:800;color:var(--am-amalfi);margin-bottom:4px;}
+  #again-map-first .am-discover-head {align-items:center;}
+  #again-map-first .am-mini-mascot {height:60px;width:65px;object-fit:contain;flex:none;filter:drop-shadow(0 3px 3px rgba(46,90,167,.08));}
+  #again-map-first .am-helper-head {align-items:center;justify-content:flex-start;gap:12px;}
+  #again-map-first .am-helper-mascot {height:59px;width:72px;object-fit:contain;flex:none;}
+  #again-map-first .am-empty-mascot {display:block;width:105px;height:90px;object-fit:contain;margin:0 auto 8px;}
+  @media(max-width:355px){#again-map-first .am-mini-mascot{height:48px;width:48px}#again-map-first .am-eyebrow{font-size:8px}}
+</style>
+
+<script>
+(() => {
+  const root = document.getElementById('again-map-first');
+  const panel = root.querySelector('#am-panel');
+  const status = root.querySelector('#am-status');
+  const searchText = root.querySelector('#am-search-text');
+  const routeLine = root.querySelector('#am-route-line');
+  const fallbackPlaces = [{id:'n-seoul-tower',label:'A',name:'N Seoul Tower',tag:'Skyline · sunset',category:'scenic',latitude:37.55117,longitude:126.98823,extra:8,description:'A panoramic Seoul viewpoint.',voiceCaption:'Watch Seoul change from daylight to city lights.',bestTime:'Before sunset',hours:{summary:'Verify current hours before visiting',note:''},cost:{currency:'KRW',adult:29000,note:'Observatory ticket'},source:{label:'Official visitor information',url:'https://www.nseoultower.co.kr/eng/visit/use.asp',verifiedAt:'2026-11-21'}}];
+  const placeList = Array.isArray(window.AGAIN_PLACES) && window.AGAIN_PLACES.length ? window.AGAIN_PLACES : fallbackPlaces;
+  const frames = Object.fromEntries(placeList.map(place => [place.id, place]));
+  const firstPlace = placeList[0];
+  const state = { view:'explore', selected:firstPlace.id, saved:[], filter:'scenic', route:'frame', destination:firstPlace.name, playing:false, progress:0, captions:true, soundscape:false, guide:true, voiceListening:false, language:'en-US', voiceLanguage:'en-US', sheetHeight:315 };
+  const languages = [
+    ['en-US','English (US)'],['ko-KR','한국어'],['ja-JP','日本語'],['zh-CN','简体中文'],['zh-TW','繁體中文'],
+    ['es-ES','Español'],['fr-FR','Français'],['de-DE','Deutsch'],['pt-BR','Português'],['it-IT','Italiano'],
+    ['ru-RU','Русский'],['ar-SA','العربية'],['hi-IN','हिन्दी'],['th-TH','ไทย'],['vi-VN','Tiếng Việt'],
+    ['id-ID','Bahasa Indonesia'],['tr-TR','Türkçe']
+  ];
+  const translations = {
+    'en-US':['Explore','Route','Saved','Where do you want to go?','Scenes along your way','Plan a route','Search by voice','Find scenes on this route','Language & settings','App language','Voice recognition language','Use my location','Select your preferred language. Voice recognition availability depends on your browser and microphone permissions.','Scenic','Local','Surprise me','Listening…','Settings saved','Search destination'],
+    'ko-KR':['탐색','경로','저장','어디로 가고 싶으세요?','가는 길의 특별한 풍경','경로 찾기','음성으로 검색','이 경로의 풍경 찾기','언어 및 설정','앱 언어','음성 인식 언어','내 위치 보기','원하는 언어를 선택하세요. 음성 인식 지원은 브라우저와 마이크 권한에 따라 달라집니다.','풍경','로컬','추천','듣는 중…','설정 저장됨','목적지 검색'],
+    'ja-JP':['探索','ルート','保存','どこへ行きたいですか？','道中の風景','ルートを探す','音声で検索','ルート上の風景を探す','言語と設定','アプリの言語','音声認識の言語','現在地を表示','音声認識はブラウザとマイクの許可に依存します。','景色','ローカル','おすすめ','認識中…','設定を保存しました','目的地を検索'],
+    'zh-CN':['探索','路线','收藏','你想去哪里？','沿途风景','规划路线','语音搜索','寻找沿途景点','语言与设置','应用语言','语音识别语言','显示我的位置','语音识别取决于浏览器和麦克风权限。','风景','本地','惊喜推荐','正在聆听…','设置已保存','搜索目的地'],
+    'zh-TW':['探索','路線','收藏','想去哪裡？','沿途風景','規劃路線','語音搜尋','尋找沿途景點','語言與設定','應用程式語言','語音辨識語言','顯示我的位置','語音辨識取決於瀏覽器及麥克風權限。','風景','在地','驚喜推薦','聆聽中…','設定已儲存','搜尋目的地'],
+    'es-ES':['Explorar','Ruta','Guardados','¿Adónde quieres ir?','Lugares en tu camino','Planear ruta','Buscar por voz','Buscar lugares en la ruta','Idioma y ajustes','Idioma de la app','Idioma de reconocimiento','Mi ubicación','El reconocimiento de voz depende del navegador y los permisos del micrófono.','Paisajes','Local','Sorpréndeme','Escuchando…','Ajustes guardados','Buscar destino'],
+    'fr-FR':['Explorer','Itinéraire','Favoris','Où voulez-vous aller ?','Paysages sur votre route','Planifier','Recherche vocale','Trouver des lieux','Langue et paramètres','Langue de l’application','Langue vocale','Ma position','La reconnaissance vocale dépend du navigateur et des autorisations du micro.','Paysages','Local','Surprise','Écoute…','Paramètres enregistrés','Rechercher une destination'],
+    'de-DE':['Entdecken','Route','Gespeichert','Wohin möchtest du?','Orte auf deinem Weg','Route planen','Sprachsuche','Orte auf der Route','Sprache & Einstellungen','App-Sprache','Spracherkennung','Mein Standort','Spracherkennung hängt von Browser und Mikrofonberechtigung ab.','Aussicht','Lokal','Überraschung','Höre zu…','Gespeichert','Ziel suchen'],
+    'pt-BR':['Explorar','Rota','Salvos','Para onde você quer ir?','Cenários no caminho','Planejar rota','Busca por voz','Encontrar lugares','Idioma e configurações','Idioma do app','Idioma de voz','Minha localização','O reconhecimento de voz depende do navegador e da permissão do microfone.','Paisagens','Local','Surpreenda-me','Ouvindo…','Configurações salvas','Buscar destino'],
+    'it-IT':['Esplora','Percorso','Salvati','Dove vuoi andare?','Luoghi lungo il percorso','Pianifica','Ricerca vocale','Trova luoghi','Lingua e impostazioni','Lingua app','Lingua vocale','La mia posizione','Il riconoscimento vocale dipende dal browser e dal microfono.','Panorami','Locale','Sorprendimi','Ascolto…','Impostazioni salvate','Cerca destinazione'],
+    'ru-RU':['Исследовать','Маршрут','Сохранено','Куда хотите пойти?','Места по пути','Построить маршрут','Голосовой поиск','Найти места на пути','Язык и настройки','Язык приложения','Язык распознавания','Моё местоположение','Распознавание речи зависит от браузера и разрешения на микрофон.','Виды','Местное','Удивите меня','Слушаю…','Настройки сохранены','Поиск места'],
+    'ar-SA':['استكشف','المسار','المحفوظات','إلى أين تريد الذهاب؟','أماكن على الطريق','خطط للمسار','البحث الصوتي','اعثر على الأماكن','اللغة والإعدادات','لغة التطبيق','لغة التعرف الصوتي','موقعي الحالي','يعتمد التعرف الصوتي على المتصفح وإذن الميكروفون.','مناظر','محلي','فاجئني','أستمع…','تم حفظ الإعدادات','ابحث عن وجهة'],
+    'hi-IN':['खोजें','रास्ता','सहेजे गए','आप कहाँ जाना चाहते हैं?','रास्ते के नज़ारे','रास्ता बनाएँ','आवाज़ से खोजें','रास्ते में स्थान खोजें','भाषा और सेटिंग','ऐप भाषा','आवाज़ पहचान भाषा','मेरी लोकेशन','आवाज़ पहचान ब्राउज़र और माइक्रोफ़ोन अनुमति पर निर्भर है।','नज़ारे','स्थानीय','कुछ नया','सुन रहा है…','सेटिंग सहेजी गई','गंतव्य खोजें'],
+    'th-TH':['สำรวจ','เส้นทาง','บันทึก','อยากไปที่ไหน?','สถานที่ระหว่างทาง','วางแผนเส้นทาง','ค้นหาด้วยเสียง','ค้นหาสถานที่','ภาษาและการตั้งค่า','ภาษาแอป','ภาษารับเสียง','ตำแหน่งของฉัน','การรู้จำเสียงขึ้นอยู่กับเบราว์เซอร์และสิทธิ์ไมโครโฟน','วิวสวย','ท้องถิ่น','สุ่มแนะนำ','กำลังฟัง…','บันทึกแล้ว','ค้นหาจุดหมาย'],
+    'vi-VN':['Khám phá','Lộ trình','Đã lưu','Bạn muốn đi đâu?','Cảnh đẹp trên đường','Lập lộ trình','Tìm bằng giọng nói','Tìm địa điểm','Ngôn ngữ & cài đặt','Ngôn ngữ ứng dụng','Ngôn ngữ nhận giọng nói','Vị trí của tôi','Nhận dạng giọng nói phụ thuộc vào trình duyệt và quyền micro.','Cảnh đẹp','Địa phương','Gợi ý bất ngờ','Đang nghe…','Đã lưu cài đặt','Tìm điểm đến'],
+    'id-ID':['Jelajahi','Rute','Tersimpan','Mau pergi ke mana?','Tempat sepanjang jalan','Rencanakan rute','Cari dengan suara','Cari tempat di rute','Bahasa & pengaturan','Bahasa aplikasi','Bahasa pengenal suara','Lokasi saya','Pengenalan suara bergantung pada browser dan izin mikrofon.','Pemandangan','Lokal','Kejutkan saya','Mendengarkan…','Pengaturan tersimpan','Cari tujuan'],
+    'tr-TR':['Keşfet','Rota','Kaydedilenler','Nereye gitmek istersiniz?','Yolunuzdaki manzaralar','Rota planla','Sesle ara','Rota üzerinde ara','Dil ve ayarlar','Uygulama dili','Ses tanıma dili','Konumum','Ses tanıma tarayıcıya ve mikrofon iznine bağlıdır.','Manzara','Yerel','Şaşırt beni','Dinleniyor…','Ayarlar kaydedildi','Hedef ara']
+  };
+  const tr = (i) => (translations[state.language] || translations['en-US'])[i];
+  const localeForVoice = () => state.language;
+  function applyTranslations(){
+    root.lang=state.language.split('-')[0];
+    const nav=root.querySelectorAll('.am-nav button span'); nav.forEach((el,i)=>el.textContent=tr(i));
+    const chips=root.querySelectorAll('.am-chips button'); chips.forEach((el,i)=>{const svg=el.querySelector('svg');const content=svg?svg.outerHTML:'';el.innerHTML=content+tr(13+i);});
+    root.querySelector('[data-action="location"]').setAttribute('aria-label',tr(11));
+    root.querySelector('[data-action="settings"]').setAttribute('aria-label',tr(8));
+    const heading=panel.querySelector('.am-discover-head h2');if(heading)heading.textContent=tr(4);
+    const helper=panel.querySelector('.am-helper-head h2');if(helper&&state.view==='search')helper.textContent=tr(5);
+    const voiceButton=panel.querySelector('[data-action="voice"]');if(voiceButton)voiceButton.innerHTML=icon(state.voiceListening?'audio-lines':'mic')+(state.voiceListening?tr(16):tr(6));
+    const submit=panel.querySelector('#am-route-form button[type="submit"]');if(submit)submit.textContent=tr(7);
+  }
+  function setSheetHeight(value){
+    const phone=root.querySelector('.am-phone');const max=Math.max(200,phone.clientHeight-165);
+    state.sheetHeight=Math.min(max,Math.max(96,Math.round(Number(value)||315)));
+    panel.style.setProperty('--sheet-height',state.sheetHeight+'px');
+    panel.classList.toggle('is-collapsed',state.sheetHeight<145);
+    root.querySelector('.am-map-tools').style.bottom=(state.sheetHeight+81)+'px';
+    if(map)map.invalidateSize();
+  }
+  async function searchDestination(query){
+    const value=String(query||'').trim(); if(!value)return;
+    state.destination=value;
+    const lower=value.toLocaleLowerCase();
+    const aliases={'n-seoul-tower':['n seoul','namsan','남산','서울타워','ソウルタワー','首尔塔','首爾塔'], 'bukchon-hanok-village':['bukchon','북촌','北村','hanok'], 'cheonggyecheon-stream':['cheonggye','청계천','清溪川'], 'seoullo-7017':['seoullo','서울로','首尔路']};
+    const match=placeList.find(p=>lower.includes(p.name.toLowerCase()) || (aliases[p.id]||[]).some(a=>lower.includes(a)));
+    if(match){state.selected=match.id;state.destination=match.name;state.view='detail';map?.flyTo([match.latitude,match.longitude],15);render();persist();status.textContent=match.name;return;}
+    status.textContent='Searching map for '+value+'…';
+    try{
+      const response=await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q='+encodeURIComponent(value),{headers:{'Accept-Language':state.language.split('-')[0]}});
+      if(!response.ok)throw new Error('Search failed');
+      const results=await response.json();
+      if(results.length&&map){const place=results[0];map.flyTo([Number(place.lat),Number(place.lon)],15);if(searchMarker)searchMarker.remove();searchMarker=L.marker([Number(place.lat),Number(place.lon)]).addTo(map).bindPopup(escapeHTML(place.display_name)).openPopup();status.textContent=place.display_name;state.view='explore';}
+      else status.textContent='No map result. Try a more specific place name.';
+    }catch{status.textContent='Map search requires internet access. Try one of the featured places.';}
+    render();persist();
+  }
+  let audioTimer = null;
+  let map = null;
+  let currentMarker = null;
+  let searchMarker = null;
+  let activeRecognition = null;
+  const mapMarkers = new Map();
+  const icon = n => '<i data-lucide="'+n+'" aria-hidden="true"></i>';
+  const thumbClass = f => 'am-t'+((placeList.indexOf(f)%3)+1);
+  const money = amount => amount == null || !Number.isFinite(Number(amount)) ? 'Check price' : Number(amount) === 0 ? 'Free' : '₩'+Number(amount).toLocaleString('en-US');
+  const escapeHTML = value => String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+  const visiblePlaces = () => state.filter==='surprise' ? placeList : placeList.filter(place => place.category===state.filter);
+  const card = f => '<button type="button" class="am-card cursor-interaction" data-action="frame" data-id="'+f.id+'"><span class="am-thumb '+thumbClass(f)+'"><span class="am-badge">+'+f.extra+' min</span><span class="am-audio-dot">'+icon('headphones')+'</span></span><strong>'+f.name+'</strong><small>'+f.tag+'</small></button>';
+  const handle = '<button type="button" class="am-handle" data-action="sheet-toggle" aria-label="Expand or collapse bottom panel"></button>';
+  function explore(){
+    const shown=visiblePlaces();
+    return handle+'<div class="am-panel-head am-discover-head"><div><div class="am-eyebrow">AGAIN · SEE IT. HEAR IT. FIND IT.</div><h2>Scenes along your way</h2><p>Verified places and viewpoints in Seoul</p></div><img class="am-mini-mascot" src="/brand/again-mascot.png" alt="AGAIN travel mascot" width="64" height="60" loading="lazy"><button type="button" class="am-pill cursor-interaction" data-action="time">+15 min</button></div><div class="am-cards">'+shown.map(card).join('')+'</div>';
+  }
+  function detail(){
+    const f=frames[state.selected], saved=state.saved.includes(f.id);
+    const pct=Math.round(state.progress/24*100), elapsed='0:'+String(state.progress).padStart(2,'0');
+    const source=f.source||{}, cost=f.cost||{adult:0,note:'Cost information needs verification.'}, hours=f.hours||{summary:'Hours need verification.',note:''};
+    return handle+
+      '<div class="am-detail-hero '+thumbClass(f)+'"><button type="button" class="am-close cursor-interaction" data-action="close" aria-label="Close details">'+icon('x')+'</button></div>'+
+      '<div class="am-detail-title"><div><h2>'+f.name+'</h2><p>Hidden Frame · '+f.tag+'</p></div><button type="button" class="am-save cursor-interaction '+(saved?'is-saved':'')+'" data-action="save" data-id="'+f.id+'" aria-label="'+(saved?'Remove from saved':'Save scene')+'">'+icon(saved?'bookmark-check':'bookmark')+'</button></div>'+
+      '<div class="am-meta"><span>+'+f.extra+' min walk</span><span>'+f.bestTime+'</span><span>Verified '+source.verifiedAt+'</span></div>'+
+      '<div class="am-audio"><button type="button" class="am-play cursor-interaction" data-action="play" aria-label="'+(state.playing?'Pause':'Play')+' Hidden Frame Voice">'+icon(state.playing?'pause':'play')+'</button><div class="am-audio-copy"><strong>Hidden Frame Voice</strong><small>AI voice demo · '+elapsed+' / 0:24</small><div class="am-progress" role="progressbar" aria-label="Voice story progress" aria-valuemin="0" aria-valuemax="24" aria-valuenow="'+state.progress+'"><span style="width:'+pct+'%"></span></div></div><button type="button" class="am-cc cursor-interaction" data-action="captions" aria-pressed="'+state.captions+'" aria-label="Toggle captions">CC</button></div>'+
+      (state.captions?'<p class="am-caption">“'+f.voiceCaption+'”</p>':'')+
+      '<div class="am-cost"><div class="am-cost-head"><strong>Total Cost Preview</strong><b>'+money(cost.adult)+'</b></div><p>'+cost.note+'</p></div>'+
+      '<div class="am-info-grid"><div class="am-info-row">'+icon('clock-3')+'<div><strong>Operating information</strong><small>'+hours.summary+'. '+(hours.note||'')+'</small></div></div><div class="am-info-row">'+icon('circle-help')+'<div><strong>Local Helper</strong><small>'+(f.localHelper||'Local guidance is being verified.')+'</small></div></div><div class="am-info-row">'+icon('accessibility')+'<div><strong>Accessibility</strong><small>'+(f.accessibility||'Accessibility information is being verified.')+'</small></div></div></div>'+
+      '<div class="am-soundscape">'+icon('audio-lines')+'<div><strong>Soundscape preview</strong><small>AI-generated ambience · not a field recording</small></div><button type="button" class="am-sound-button cursor-interaction" data-action="soundscape" aria-pressed="'+state.soundscape+'" aria-label="Toggle soundscape">'+icon(state.soundscape?'volume-2':'volume-1')+'</button></div>'+
+      '<p>'+f.description+'</p><div class="am-source"><span>Last checked '+source.verifiedAt+'</span><a href="'+source.url+'" target="_blank" rel="noreferrer">Official source</a></div>'+
+      '<div class="am-actions"><button type="button" class="am-button cursor-interaction" data-action="close">Keep browsing</button><button type="button" class="am-button am-primary cursor-interaction" data-action="add">'+icon('route')+'Add to route</button></div>';
+  }
+  function search(){
+    return handle+'<div class="am-panel-head am-helper-head"><img class="am-helper-mascot" src="/brand/again-listen.png" alt="AGAIN listening companion" width="72" height="58"><div><div class="am-eyebrow">ASK AGAIN</div><h2>Plan a route</h2><p>Type or say a destination in your own language.</p></div></div><form id="am-route-form" class="am-search-panel"><label class="am-field"><span></span><input name="from" value="Myeongdong Station" aria-label="Starting point"></label><label class="am-field am-dest"><span></span><input name="to" value="'+escapeHTML(state.destination)+'" aria-label="Destination"></label><button type="button" class="am-button '+(state.voiceListening?'am-voice-listening':'')+' cursor-interaction" data-action="voice">'+icon(state.voiceListening?'audio-lines':'mic')+(state.voiceListening?'Listening…':'Search by voice')+'</button><button type="submit" class="am-button am-primary cursor-interaction">Find scenes on this route</button></form>';
+  }
+  function route(){
+    const f=frames[state.selected], via=state.route==='frame';
+    return handle+'<div class="am-panel-head am-helper-head"><img class="am-helper-mascot" src="/brand/again-navigate.png" alt="AGAIN navigating companion" width="72" height="58"><div><h2>Choose your way</h2><p>Myeongdong Station → '+state.destination+'</p></div></div><div class="am-route-compare"><button type="button" class="am-route-option cursor-interaction '+(!via?'is-active':'')+'" data-action="route-mode" data-mode="direct"><small>Direct</small><strong>24 min</strong><small>Fastest route</small></button><button type="button" class="am-route-option cursor-interaction '+(via?'is-active':'')+'" data-action="route-mode" data-mode="frame"><small>Via Hidden Frame</small><strong>'+(24+f.extra)+' min</strong><small>+'+f.extra+' min walking</small></button></div>'+(via?'<div class="am-route-summary">'+icon('camera')+'<div><strong>'+f.name+'</strong><small>'+money(f.cost?.adult||0)+' · '+f.hours?.summary+'</small></div><button type="button" class="am-save cursor-interaction '+(state.saved.includes(f.id)?'is-saved':'')+'" data-action="save" data-id="'+f.id+'" aria-label="Save frame">'+icon(state.saved.includes(f.id)?'bookmark-check':'bookmark')+'</button></div>':'')+'<div class="am-guide">'+icon('headphones')+'<div><strong>Smart Voice Guide</strong><small>Confirmed stops, exits and walking turns only</small></div><button type="button" class="am-switch cursor-interaction" data-action="guide" aria-pressed="'+state.guide+'" aria-label="Toggle smart voice guide"><span></span></button></div><div class="am-actions"><button type="button" class="am-button cursor-interaction" data-action="explore">Back</button><button type="button" class="am-button am-primary cursor-interaction" data-action="directions">'+icon('navigation')+'Start directions</button></div>';
+  }
+  function saved(){
+    const items=state.saved.map(id=>frames[id]);
+    return handle+'<div class="am-panel-head"><div><h2>Saved scenes</h2><p>Stored on this device — no account needed.</p></div></div>'+(items.length?'<div class="am-list">'+items.map(f=>'<div class="am-saved-row"><span class="am-thumb '+thumbClass(f)+'"></span><div><strong>'+f.name+'</strong><small>'+f.tag+' · '+money(f.cost?.adult||0)+'</small></div><button type="button" class="cursor-interaction" data-action="remove" data-id="'+f.id+'" aria-label="Remove '+f.name+'">'+icon('x')+'</button></div>').join('')+'</div>':'<div class="am-empty"><img class="am-empty-mascot" src="/brand/again-remember.png" alt="AGAIN memory companion" width="105" height="90"><h2>No saved scenes yet</h2><p>Save a frame and come back to it anytime.</p><div class="am-actions"><span></span><button type="button" class="am-button am-primary cursor-interaction" data-action="explore">Explore map</button></div></div>');
+  }
+  function settings(){
+    const options=languages.map(([code,label])=>'<option value="'+code+'" '+(state.language===code?'selected':'')+'>'+label+'</option>').join('');
+    const voiceOptions=languages.map(([code,label])=>'<option value="'+code+'" '+(state.voiceLanguage===code?'selected':'')+'>'+label+'</option>').join('');
+    return handle+'<div class="am-panel-head"><div><h2>'+tr(8)+'</h2><p>AGAIN · Global travel companion</p></div></div><div class="am-settings"><label for="am-language">'+tr(9)+'</label><select id="am-language" aria-label="'+tr(9)+'">'+options+'</select><label for="am-voice-language">'+tr(10)+'</label><select id="am-voice-language" aria-label="'+tr(10)+'">'+voiceOptions+'</select><p class="am-hint">'+tr(12)+'</p><button class="am-button am-primary" type="button" data-action="location">'+icon('locate-fixed')+tr(11)+'</button></div>';
+  }
+  function render(){
+    const previousScroll=panel.scrollTop;
+    panel.innerHTML=state.view==='explore'?explore():state.view==='detail'?detail():state.view==='search'?search():state.view==='route'?route():state.view==='settings'?settings():saved();
+    searchText.textContent=state.destination || 'Where do you want to go?';
+    routeLine.hidden=state.view!=='route';
+    root.querySelector('#am-saved-count').textContent=state.saved.length||'';
+    root.querySelectorAll('.am-nav button').forEach(b=>b.classList.toggle('is-active',(state.view==='saved'&&b.dataset.action==='saved')||(state.view==='route'&&b.dataset.action==='route')||(['explore','detail','search'].includes(state.view)&&b.dataset.action==='explore')));
+    root.querySelectorAll('.am-chips button').forEach(b=>b.classList.toggle('is-active',b.dataset.filter===state.filter));
+    if(globalThis.lucide) globalThis.lucide.createIcons({attrs:{width:18,height:18}});
+    applyTranslations();setSheetHeight(state.sheetHeight);
+    panel.scrollTop=previousScroll;
+    updateMapMarkers();
+  }
+  function initMap(){
+    if(!globalThis.L){status.textContent='Map tiles are unavailable. Place details still work offline.';return;}
+    map=L.map('am-leaflet-map',{zoomControl:false,attributionControl:true}).setView([37.5665,126.9780],13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
+    placeList.forEach(place=>{
+      const marker=L.marker([place.latitude,place.longitude],{icon:L.divIcon({className:'am-leaflet-pin',html:'<span>'+place.label+'</span>',iconSize:[40,47],iconAnchor:[20,43]})});
+      marker.bindPopup('<strong>'+escapeHTML(place.name)+'</strong>'+escapeHTML(place.tag)+' · '+money(place.cost?.adult));
+      marker.on('click',()=>{state.selected=place.id;state.view='detail';render();persist();});
+      mapMarkers.set(place.id,marker);
+    });
+    updateMapMarkers();
+  }
+  function updateMapMarkers(){
+    if(!map)return;
+    const allowed=new Set(visiblePlaces().map(place=>place.id));
+    mapMarkers.forEach((marker,id)=>{
+      if(allowed.has(id)){if(!map.hasLayer(marker))marker.addTo(map);}else if(map.hasLayer(marker))map.removeLayer(marker);
+      const selected=id===state.selected;
+      const el=marker.getElement();if(el)el.classList.toggle('is-selected',selected);
+    });
+  }
+  function syncAudio(){
+    if(!state.playing){if(audioTimer){clearInterval(audioTimer);audioTimer=null;}return;}
+    if(audioTimer)return;
+    audioTimer=setInterval(()=>{if(!state.playing||state.view!=='detail'){state.playing=false;syncAudio();return;}state.progress+=1;if(state.progress>=24){state.progress=0;state.playing=false;}render();if(!state.playing)syncAudio();},1000);
+  }
+  function persist(){
+    const snapshot={saved:state.saved,filter:state.filter,selected:state.selected,guide:state.guide,captions:state.captions,language:state.language,voiceLanguage:state.voiceLanguage,sheetHeight:state.sheetHeight};
+    try{localStorage.setItem('again-state-v1',JSON.stringify(snapshot));}catch{}
+    if(window.openai?.setWidgetState) window.openai.setWidgetState({modelContent:{view:state.view,selectedFrame:frames[state.selected].name,savedCount:state.saved.length,routeMode:state.route},privateContent:state}).catch(()=>{});
+  }
+  function startVoiceSearch(){
+    const Recognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+    state.view='search';
+    if(!Recognition){state.voiceListening=false;render();status.textContent='Voice recognition is not supported here. Try Chrome or Edge, or type your destination.';return;}
+    if(activeRecognition){activeRecognition.abort();activeRecognition=null;}
+    const recognition=new Recognition(); activeRecognition=recognition;
+    recognition.lang=state.voiceLanguage||localeForVoice();recognition.interimResults=false;recognition.maxAlternatives=1;recognition.continuous=false;
+    state.voiceListening=true;render();status.textContent='Listening ('+recognition.lang+')…';
+    recognition.onresult=event=>{const transcript=event.results[0]?.[0]?.transcript?.trim();state.voiceListening=false;activeRecognition=null;if(transcript)searchDestination(transcript);else{render();status.textContent='No speech detected.';}};
+    recognition.onerror=e=>{state.voiceListening=false;activeRecognition=null;render();status.textContent=e.error==='not-allowed'?'Please allow microphone access in your browser.':'Speech recognition unavailable ('+e.error+'). You can type your destination.';};
+    recognition.onend=()=>{if(activeRecognition===recognition){activeRecognition=null;state.voiceListening=false;render();}};
+    try{recognition.start();}catch{state.voiceListening=false;render();status.textContent='Unable to start microphone.';}
+  }
+  function act(action,el){
+    status.textContent='';
+    if(action==='frame'){state.selected=el.dataset.id;state.view='detail';}
+    else if(action==='close'||action==='explore'){state.view='explore';}
+    else if(action==='search'){state.view='search';}
+    else if(action==='settings'){state.view='settings';state.sheetHeight=Math.max(state.sheetHeight,340);}
+    else if(action==='sheet-toggle'){setSheetHeight(state.sheetHeight<145?315:state.sheetHeight>400?105:Math.min(510,root.querySelector('.am-phone').clientHeight-165));persist();return;}
+    else if(action==='route'){state.view='route';}
+    else if(action==='saved'){state.view='saved';}
+    else if(action==='add'){state.route='frame';state.view='route';}
+    else if(action==='route-mode'){state.route=el.dataset.mode;}
+    else if(action==='filter'){state.filter=el.dataset.filter;status.textContent='Map markers updated for '+el.textContent.trim()+'.';}
+    else if(action==='save'){const id=el.dataset.id;state.saved=state.saved.includes(id)?state.saved.filter(x=>x!==id):[...state.saved,id];status.textContent=state.saved.includes(id)?'Scene saved on this device.':'Scene removed.';}
+    else if(action==='remove'){state.saved=state.saved.filter(x=>x!==el.dataset.id);status.textContent='Scene removed.';}
+    else if(action==='directions'){const f=frames[state.selected];window.open('https://www.google.com/maps/dir/?api=1&destination='+f.latitude+','+f.longitude,'_blank','noopener');status.textContent='Opening directions to '+f.name+'.';}
+    else if(action==='location'){
+      if(!map){status.textContent='Map is unavailable while map scripts are offline.';}
+      else if(!navigator.geolocation){status.textContent='Location is not supported in this browser.';}
+      else if(!window.isSecureContext){status.textContent='For location access, open AGAIN on HTTPS or localhost.';}
+      else {
+        const button=root.querySelector('.am-map-tools [data-action="location"]');button?.classList.add('is-locating');
+        status.textContent='Finding your current location…';
+        navigator.geolocation.getCurrentPosition(pos=>{
+          button?.classList.remove('is-locating');const point=[pos.coords.latitude,pos.coords.longitude];
+          map.flyTo(point,16);if(currentMarker)currentMarker.remove();
+          currentMarker=L.circleMarker(point,{radius:9,color:'#fff',weight:3,fillColor:'#2E5AA7',fillOpacity:1}).addTo(map).bindPopup('Your current location · accuracy approx. '+Math.round(pos.coords.accuracy)+' m');
+          currentMarker.openPopup();setSheetHeight(115);status.textContent='Current location shown on the map (±'+Math.round(pos.coords.accuracy)+' m).';
+        },err=>{button?.classList.remove('is-locating');status.textContent=err.code===1?'Location permission denied. Allow location in browser site settings.':err.code===2?'Could not determine your location. Enable device location services.':'Location request timed out. Try again.';},{enableHighAccuracy:true,timeout:12000,maximumAge:30000});
+        return;
+      }
+    }
+    else if(action==='layers'){status.textContent='Map layer menu would open here.';}
+    else if(action==='time'){status.textContent='Showing scenes within 15 extra minutes.';}
+    else if(action==='play'){state.playing=!state.playing;if(state.progress>=24)state.progress=0;status.textContent=state.playing?'Demo playback progress only — ElevenLabs audio is not yet connected.':'Demo playback paused.';}
+    else if(action==='captions'){state.captions=!state.captions;}
+    else if(action==='soundscape'){state.soundscape=!state.soundscape;status.textContent='Soundscape is a UI preview. No audio asset is connected yet.';}
+    else if(action==='guide'){state.guide=!state.guide;status.textContent=state.guide?'Smart Voice Guide enabled.':'Smart Voice Guide disabled.';}
+    else if(action==='voice'){startVoiceSearch();return;}
+    render();syncAudio();persist();
+  }
+  root.addEventListener('click',e=>{const b=e.target.closest('button');if(b&&root.contains(b)&&b.dataset.action){if(b.dataset.action==='sheet-toggle'&&panel.dataset.justDragged)return;act(b.dataset.action,b);}});
+  root.addEventListener('submit',e=>{if(e.target.id!=='am-route-form')return;e.preventDefault();const data=new FormData(e.target);searchDestination(String(data.get('to')||'').trim());});
+  root.addEventListener('change',e=>{if(e.target.id==='am-language'){state.language=e.target.value;state.voiceLanguage=e.target.value;render();persist();status.textContent=tr(17);}else if(e.target.id==='am-voice-language'){state.voiceLanguage=e.target.value;render();persist();status.textContent=tr(17);}});
+  let drag=null;
+  panel.addEventListener('pointerdown',e=>{if(!e.target.closest('.am-handle'))return;drag={id:e.pointerId,startY:e.clientY,height:state.sheetHeight,moved:false};panel.classList.add('is-dragging');panel.setPointerCapture(e.pointerId);});
+  panel.addEventListener('pointermove',e=>{if(!drag||drag.id!==e.pointerId)return;const diff=drag.startY-e.clientY;if(Math.abs(diff)>6)drag.moved=true;setSheetHeight(drag.height+diff);});
+  function finishDrag(e){if(!drag||drag.id!==e.pointerId)return;const moved=drag.moved;drag=null;panel.classList.remove('is-dragging');if(moved){persist();panel.dataset.justDragged='yes';setTimeout(()=>delete panel.dataset.justDragged,80);}}
+  panel.addEventListener('pointerup',finishDrag);panel.addEventListener('pointercancel',finishDrag);
+  try{const local=JSON.parse(localStorage.getItem('again-state-v1')||'null');if(local&&typeof local==='object')Object.assign(state,local);}catch{}
+  state.saved=Array.isArray(state.saved)?state.saved.filter(id=>frames[id]):[];
+  if(!frames[state.selected])state.selected=firstPlace.id;
+  const savedState=window.openai?.widgetState?.privateContent;if(savedState&&typeof savedState==='object')Object.assign(state,savedState);
+  state.saved=Array.isArray(state.saved)?state.saved.filter(id=>frames[id]):[];
+  if(!frames[state.selected])state.selected=firstPlace.id;
+  if(!['explore','detail','search','route','saved','settings'].includes(state.view))state.view='explore';
+  if(!languages.some(l=>l[0]===state.language))state.language='en-US';
+  if(!languages.some(l=>l[0]===state.voiceLanguage))state.voiceLanguage=state.language;
+  window.addEventListener('openai:set_globals',e=>{const s=e.detail?.globals?.widgetState?.privateContent;if(s&&typeof s==='object'){Object.assign(state,s);render();}});
+  render();
+  initMap();
+})();
+</script>
