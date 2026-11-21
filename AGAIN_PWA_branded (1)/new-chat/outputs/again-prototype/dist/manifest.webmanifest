@@ -1,0 +1,43 @@
+{
+  "name": "AGAIN — See it. Hear it. Find it.",
+  "short_name": "AGAIN",
+  "description": "Discover Korean Hidden Frames, hear their stories, and add them to your route.",
+  "id": "/",
+  "start_url": "/?source=pwa",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#F8E6A0",
+  "theme_color": "#2E5AA7",
+  "categories": [
+    "travel",
+    "navigation",
+    "lifestyle"
+  ],
+  "icons": [
+    {
+      "src": "/brand/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/brand/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Explore Hidden Frames",
+      "short_name": "Explore",
+      "url": "/?view=explore"
+    },
+    {
+      "name": "Saved scenes",
+      "short_name": "Saved",
+      "url": "/?view=saved"
+    }
+  ]
+}

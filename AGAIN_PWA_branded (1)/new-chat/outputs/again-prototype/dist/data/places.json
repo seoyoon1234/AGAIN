@@ -1,0 +1,143 @@
+[
+  {
+    "id": "n-seoul-tower",
+    "label": "A",
+    "name": "N Seoul Tower",
+    "tag": "Skyline · sunset",
+    "category": "scenic",
+    "latitude": 37.55117,
+    "longitude": 126.98823,
+    "extra": 8,
+    "description": "A panoramic Seoul viewpoint on Namsan with a clear sunset-to-night transition.",
+    "voiceCaption": "As daylight leaves the city, the Han River and Seoul's ridgelines begin to separate into layers of light.",
+    "bestTime": "40 minutes before sunset",
+    "hours": {
+      "summary": "Weekdays 10:00–22:30 · Weekends/holidays 10:00–23:00",
+      "note": "Last observatory admission is 30 minutes before closing. Hours can change with weather and operations."
+    },
+    "cost": {
+      "currency": "KRW",
+      "minimum": 0,
+      "adult": 29000,
+      "childSenior": 23000,
+      "transportOptions": [
+        { "label": "Walk through Namsan Park", "amount": 0 },
+        { "label": "Cable car adult round trip", "amount": 15000 }
+      ],
+      "note": "The outdoor plaza is free. Observatory admission and transport are optional."
+    },
+    "localHelper": "The Namsan Ormi inclined elevator is free. It is suspended Mondays 09:00–14:00 for maintenance and may stop in strong wind or heavy rain.",
+    "accessibility": "Elevator information is available inside the tower; verify the selected walking approach before departure.",
+    "weatherFit": ["clear", "cloudy"],
+    "momentTags": ["sunset", "night-view", "first-visit"],
+    "source": {
+      "label": "N Seoul Tower official visitor information",
+      "url": "https://www.nseoultower.co.kr/eng/visit/use.asp",
+      "costUrl": "https://www.nseoultower.co.kr/eng/visit/use2.asp",
+      "transportUrl": "https://www.nseoultower.co.kr/eng/visit/traffic2.asp",
+      "verifiedAt": "2026-11-21"
+    }
+  },
+  {
+    "id": "bukchon-hanok-village",
+    "label": "B",
+    "name": "Bukchon Hanok Village",
+    "tag": "Hanok · neighborhood",
+    "category": "local",
+    "latitude": 37.5826,
+    "longitude": 126.98399,
+    "extra": 12,
+    "description": "A living residential neighborhood where tiled hanok roofs frame the downtown skyline.",
+    "voiceCaption": "Bukchon is beautiful because it is still a neighborhood. Walk quietly, keep doorways clear, and photograph the streets with care.",
+    "bestTime": "Weekday morning after 10:00",
+    "hours": {
+      "summary": "Tourist visiting hours Mon–Sat 10:00–17:00",
+      "note": "Sunday is an alley rest day. Bukchon-ro 11-gil's red zone is restricted from 17:00 to 10:00; violations can be fined KRW 100,000."
+    },
+    "cost": {
+      "currency": "KRW",
+      "minimum": 0,
+      "adult": 0,
+      "childSenior": 0,
+      "transportOptions": [],
+      "note": "Walking through the village is free. Individual workshops and museums may charge separately."
+    },
+    "localHelper": "This is a residential area. Keep voices low, do not look into homes, and avoid blocking narrow lanes.",
+    "accessibility": "The area includes steep slopes, steps, and narrow lanes. Check a step-free route before visiting.",
+    "weatherFit": ["clear", "cloudy"],
+    "momentTags": ["architecture", "morning", "quiet"],
+    "source": {
+      "label": "Seoul Metropolitan Government Bukchon visitor notice",
+      "url": "https://english.seoul.go.kr/notice-on-restrictions-for-tourist-visits-to-bukchon-special-management-area-effective-from-november-2024/",
+      "verifiedAt": "2026-11-21"
+    }
+  },
+  {
+    "id": "cheonggyecheon-stream",
+    "label": "C",
+    "name": "Cheonggyecheon Stream",
+    "tag": "Waterfront · night walk",
+    "category": "scenic",
+    "latitude": 37.56914,
+    "longitude": 126.97803,
+    "extra": 6,
+    "description": "A low, walkable stream corridor through central Seoul with bridges, reflections, and evening light.",
+    "voiceCaption": "A few steps below street level, the sound of traffic softens and central Seoul follows the stream instead.",
+    "bestTime": "Blue hour or early evening",
+    "hours": {
+      "summary": "Open 24 hours, 7 days a week",
+      "note": "Access may be restricted during rain for safety."
+    },
+    "cost": {
+      "currency": "KRW",
+      "minimum": 0,
+      "adult": 0,
+      "childSenior": 0,
+      "transportOptions": [],
+      "note": "The stream promenade is free."
+    },
+    "localHelper": "There are multiple subway access points along the stream. Choose the entry closest to the scene you want to see.",
+    "accessibility": "Use signed ramp entrances; some stair-only entrances are not step-free.",
+    "weatherFit": ["clear", "cloudy"],
+    "momentTags": ["night-walk", "water", "free"],
+    "source": {
+      "label": "Visit Seoul official Cheonggyecheon guide",
+      "url": "https://english.visitseoul.net/attractions--/Cheonggyecheon-Stream_/35",
+      "verifiedAt": "2026-11-21"
+    }
+  },
+  {
+    "id": "seoullo-7017",
+    "label": "D",
+    "name": "Seoullo 7017",
+    "tag": "City walk · elevated view",
+    "category": "local",
+    "latitude": 37.5565,
+    "longitude": 126.9723,
+    "extra": 9,
+    "description": "An elevated pedestrian path linking Seoul Station to nearby neighborhoods and city viewpoints.",
+    "voiceCaption": "This former overpass now lets you cross the city slowly, above traffic and between Seoul Station's old and new faces.",
+    "bestTime": "Late afternoon into evening",
+    "hours": {
+      "summary": "Open 24 hours, 365 days a year",
+      "note": "Individual cafés and facilities keep separate operating hours."
+    },
+    "cost": {
+      "currency": "KRW",
+      "minimum": 0,
+      "adult": 0,
+      "childSenior": 0,
+      "transportOptions": [],
+      "note": "Walking on Seoullo 7017 is free."
+    },
+    "localHelper": "Seoullo has multiple access points around Seoul Station, Namdaemun Market, and Malli-dong.",
+    "accessibility": "Use signed elevator access points around Seoul Station and Malli-dong; verify the nearest operating elevator before departure.",
+    "weatherFit": ["clear", "cloudy"],
+    "momentTags": ["city-walk", "architecture", "free"],
+    "source": {
+      "label": "Visit Seoul official Seoullo 7017 information",
+      "url": "https://english.visitseoul.net/hallyu/7-COLORS-OF-SEOUL-by-BTS/ENN027056",
+      "verifiedAt": "2026-11-21"
+    }
+  }
+]
